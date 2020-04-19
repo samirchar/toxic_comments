@@ -1,5 +1,12 @@
 import os
 import sys
+from dotenv import load_dotenv, find_dotenv
+
+sys.path.append(os.path.abspath("../.."))
+# find .env automagically by walking up directories until it's found
+dotenv_path = find_dotenv()
+# load up the entries as environment variables
+load_dotenv(dotenv_path)
 
 from src.code_snippets.dataprep.stanford_corenlp.utils import serverConnection
 from src.code_snippets.utils.abstract_classes import DataProcessor
@@ -75,7 +82,10 @@ class textProcessor(DataProcessor):
             apply(lambda x: count_ner_tags_in_tokenized_sentence(x,'VERB'))\
             *100/self.df['num_words']
         
-    def pre_process(self,text_col: str,max_len: int, target_cols: list,aux_cols  = None):
+    def pre_process(self,text_col: str,max_len: int, target_cols: list,aux_cols  = None, filter_long_texts = True):
+        
+        if filter_long_texts:
+            self.df = self.df[self.df['num_words']<=max_len]
         X = self.df[text_col].values
         X_indices = sentences_to_indices(X,self.word_to_index,max_len)
         y = self.df[target_cols].values

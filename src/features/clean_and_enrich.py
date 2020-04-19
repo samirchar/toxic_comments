@@ -12,17 +12,16 @@ import numpy as np
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
 import argparse
-
+import pandas as pd
+from src.features.build_features import textProcessor
 
 if __name__ == "__main__":
-    from src.features.build_features import textProcessor
-    import modin.pandas as pd
-
     parser = argparse.ArgumentParser()
     parser.add_argument("--max_len", type=int, default=3000)
     parser.add_argument("--get_splits", type=bool, default=False)
     parser.add_argument("--test_size", type=float, default=0.04)
     parser.add_argument("--nrows", type=int, default=-1)
+    parser.add_argument("--embedding_path",type=str,default = "../../../../pretrained_embeddings/glove.twitter.27B/glove.twitter.27B.25d.txt")
 
     args = parser.parse_args()
     if args.nrows == -1:
@@ -38,7 +37,7 @@ if __name__ == "__main__":
     tp = textProcessor(
         data_dir="../../data/interim/train.csv",
         # TODO: Change embedding size
-        embedding_dir="../../../../pretrained_embeddings/glove.twitter.27B/glove.twitter.27B.25d.txt",
+        embedding_dir=args.embedding_path,
         nrows=args.nrows,
     )
 
