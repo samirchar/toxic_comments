@@ -47,8 +47,8 @@ class textProcessor(DataProcessor):
     
     def clean(self,text_col: str,new_col_name: str)->None:
         st = CoreNLPParser()
-        self.df[new_col_name] = self.df[text_col].apply(preprocessing,self.df[text_col])
-        self.df[new_col_name] = self.df[new_col_name].apply(lambda text: list(st.tokenize(text)),self.df[text_col])
+        self.df[new_col_name] = self.df[text_col].apply(preprocessing)
+        self.df[new_col_name] = self.df[new_col_name].apply(lambda text: list(st.tokenize(text)))
         
     def feature_engineer(self,text_col: str)-> None:
         temp = self.df[text_col].apply(lambda x: re.sub("\\n"," ",x))

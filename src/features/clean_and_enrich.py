@@ -13,9 +13,10 @@ from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
 import argparse
 import pandas as pd
-from src.features.build_features import textProcessor
 
 if __name__ == "__main__":
+    from src.features.build_features import textProcessor
+
     parser = argparse.ArgumentParser()
     parser.add_argument("--max_len", type=int, default=3000)
     parser.add_argument("--get_splits", type=bool, default=False)
