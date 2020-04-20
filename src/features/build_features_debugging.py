@@ -17,7 +17,6 @@ from src.code_snippets.dataprep.cleaner import (count_characters_in_tokenized_se
                                                 count_ner_tags_in_tokenized_sentence)
 from src.code_snippets.dataprep.embeddings_preprocessing.data_preparation import sentences_to_indices, pretrained_embedding_layer
 
-#TODO: Change this import to modin
 import pandas as pd
 import multiprocessing as mp
 from nltk.parse.corenlp import CoreNLPParser
@@ -87,7 +86,6 @@ class textProcessor(DataProcessor):
         
         if filter_long_texts:
             self.df = self.df[self.df['num_words']<=max_len]
-            max_len = self.df[text_col].apply(len).max()
         X = self.df[text_col].values
         X_indices = sentences_to_indices(X,self.word_to_index,max_len)
         y = self.df[target_cols].values

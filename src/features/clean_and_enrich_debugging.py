@@ -13,10 +13,9 @@ from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
 import argparse
 import pandas as pd
+from src.features.build_features_debugging import textProcessor
 
 if __name__ == "__main__":
-    from src.features.build_features import textProcessor
-
     parser = argparse.ArgumentParser()
     parser.add_argument("--max_len", type=int, default=3000)
     parser.add_argument("--get_splits", type=bool, default=False)
@@ -34,8 +33,7 @@ if __name__ == "__main__":
         )
         df_train.to_csv("../../data/interim/train.csv", index=False)
         df_val.to_csv("../../data/interim/val.csv", index=False)
-    
-    ### TRAIN ###
+
     tp = textProcessor(
         data_dir="../../data/interim/train.csv",
         # TODO: Change embedding size
@@ -70,18 +68,10 @@ if __name__ == "__main__":
     ss = StandardScaler()
     ss.fit(X_aux_train)
     X_aux_train = ss.transform(X_aux_train)
-    tp.server.kill_server()
 
-    # Save
-    np.save("../../data/processed/X_indices_train.npy", X_indices_train)
-    np.save("../../data/processed/X_aux_train.npy", X_aux_train)
-    np.save("../../data/processed/y_train.npy", y_train)
-
-
-    ### VALIDATION ###
     tp = textProcessor(
         data_dir="../../data/interim/val.csv",
-        embedding_dir=args.embedding_path,
+        embedding_dir="../../../../pretrained_embeddings/glove.twitter.27B/glove.twitter.27B.25d.txt",
         nrows=args.nrows,
     )
 
@@ -94,7 +84,11 @@ if __name__ == "__main__":
         "comment_cleaned", max_len=args.max_len, aux_cols=aux_cols, target_cols=["y"]
     )
     X_aux_val = ss.transform(X_aux_val)
-    tp.server.kill_server()
+
+    # Train
+    np.save("../../data/processed/X_indices_train.npy", X_indices_train)
+    np.save("../../data/processed/X_aux_train.npy", X_aux_train)
+    np.save("../../data/processed/y_train.npy", y_train)
 
     # Validation
     np.save("../../data/processed/X_indices_val.npy", X_indices_val)
