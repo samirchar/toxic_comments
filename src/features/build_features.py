@@ -22,7 +22,6 @@ from src.code_snippets.utils.data_handler import read_pickle,save_to_pickle
 import pandas as pd
 import multiprocessing as mp
 from nltk.parse.corenlp import CoreNLPParser
-from nltk.tokenize import word_tokenize 
 from nltk.corpus import stopwords 
 import re
 import gensim
@@ -41,6 +40,7 @@ class textProcessor(DataProcessor):
         self.nrows = nrows
         self.server = serverConnection()
         self.server.start_server()
+        self.st = CoreNLPParser()
         
     def read(self, max_len: int = -1, text_col = None)->None:
         self.df = pd.read_csv(self.data_dir,nrows = self.nrows)
@@ -53,13 +53,12 @@ class textProcessor(DataProcessor):
         self.max_len = max_len
 
     def filter_by_text_length(self,text_col: str,max_len: int):
-        temp = self.df[text_col].apply(lambda x: len(word_tokenize(re.sub("\\n"," ",x))))
+        temp = self.df[text_col].apply(lambda x: len(self.st.tokenize(re.sub("\\n"," ",x))))
         self.df = self.df[temp<=max_len]
 
     def clean(self,text_col: str,new_col_name: str,post_processing_max_len = None)->None:
-        st = CoreNLPParser()
         self.df[new_col_name] = self.df[text_col].apply(preprocessing)
-        self.df[new_col_name] = self.df[new_col_name].apply(lambda text: list(st.tokenize(text)))
+        self.df[new_col_name] = self.df[new_col_name].apply(lambda text: list(self.st.tokenize(text)))
         if post_processing_max_len is None:
             self.post_processing_max_len = self.df[new_col_name].apply(len).max()
         else:
@@ -68,7 +67,7 @@ class textProcessor(DataProcessor):
     def feature_engineer(self,text_col: str)-> None:
         temp = self.df[text_col].apply(lambda x: re.sub("\\n"," ",x))
         self.df['num_characters'] = temp.apply(len)
-        tokenized_col = temp.apply(word_tokenize)
+        tokenized_col = temp.apply(self.st.tokenize)
         self.df['num_words'] = tokenized_col.apply(len)
         self.df['clean'] = (self.df[['toxic',
                                      'severe_toxic',
