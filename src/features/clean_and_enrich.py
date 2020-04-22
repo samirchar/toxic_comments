@@ -39,6 +39,10 @@ if __name__ == "__main__":
         df_val.to_csv(os.path.join(args.interim_data_path,"val.csv"), index=False)
     
     ### TRAIN ###
+    print("=====================================================================================================")
+    print("=================================== PROCESS TRAINING  ===============================================")
+    print("=====================================================================================================")
+
     tp = textProcessor(
         data_dir=os.path.join(args.interim_data_path,"train.csv"),
         # TODO: Change embedding size
@@ -46,10 +50,9 @@ if __name__ == "__main__":
         nrows=args.nrows,
     )
 
-    tp.read(max_len=args.max_len, text_col="comment_text")
+    tp.read()
     tp.clean("comment_text", "comment_cleaned")
     tp.feature_engineer("comment_text")
-    print(f"Max length after post processing is {tp.post_processing_max_len}")
     tp.df["y"] = (~tp.df["clean"].astype(bool)).astype(int).values
 
     aux_cols = [
@@ -68,7 +71,7 @@ if __name__ == "__main__":
 
     print(f"max comment length is {args.max_len}")
     tp.pre_process(
-        "comment_cleaned", max_len=tp.post_processing_max_len, aux_cols=aux_cols, target_cols=["y"]
+        "comment_cleaned", max_len=args.max_len, aux_cols=aux_cols, target_cols=["y"],filter_by_max_length = True
     )
 
     #Kill corenlp server
@@ -79,9 +82,11 @@ if __name__ == "__main__":
 
 
     ### VALIDATION ###
+    print("=====================================================================================================")
+    print("=================================== PROCESS VALIDATION  =============================================")
+    print("=====================================================================================================")
+
     StandardScaler_train = read_pickle(os.path.join(args.processed_data_path,"StandardScaler_train.pickle"))
-    max_len_train = read_pickle(os.path.join(args.processed_data_path,"max_len_train.pickle"))
-    post_processing_max_len_train = read_pickle(os.path.join(args.processed_data_path,"post_processing_max_len_train.pickle"))
 
     tp = textProcessor(
         data_dir=os.path.join(args.interim_data_path,"val.csv"),
@@ -89,13 +94,13 @@ if __name__ == "__main__":
         nrows=args.nrows,
     )
 
-    tp.read(max_len=max_len_train, text_col="comment_text")
-    tp.clean("comment_text", "comment_cleaned",post_processing_max_len=post_processing_max_len_train)
+    tp.read()
+    tp.clean("comment_text", "comment_cleaned")
     tp.feature_engineer("comment_text")
     tp.df["y"] = (~tp.df["clean"].astype(bool)).astype(int).values
 
     tp.pre_process(
-        "comment_cleaned", max_len=tp.post_processing_max_len, aux_cols=aux_cols, target_cols=["y"],standard_scaler=StandardScaler_train
+        "comment_cleaned", max_len=args.max_len, aux_cols=aux_cols, target_cols=["y"],standard_scaler=StandardScaler_train,filter_by_max_length = True
     )
     #Kill corenlp server
     tp.server.kill_server()
