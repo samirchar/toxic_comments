@@ -106,7 +106,7 @@ class textProcessor(DataProcessor):
             #It is assumed that this is training data and we need to fit for the first time.
             if standard_scaler is not None:
                 self.ss = standard_scaler
-                X_aux = self.ss.transform(X_aux)c
+                X_aux = self.ss.transform(X_aux)
             else:
                 self.ss = StandardScaler()
                 self.ss.fit(X_aux)
