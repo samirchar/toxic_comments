@@ -42,32 +42,24 @@ class textProcessor(DataProcessor):
         self.server.start_server()
         self.st = CoreNLPParser()
         
-    def read(self, max_len: int = -1, text_col = None)->None:
+    def read(self)->None:
         self.df = pd.read_csv(self.data_dir,nrows = self.nrows)
         if self.embedding_dir is not None:
             self.gensim_model = read_glove_file(self.embedding_dir)
             self.word_to_index,self.index_to_words = get_word_index_dicts(self.gensim_model)
-        if max_len>0:
-            assert text_col is not None, 'Please specify the name of the text column'
-            self.filter_by_text_length(text_col,max_len)
-        self.max_len = max_len
 
-    def filter_by_text_length(self,text_col: str,max_len: int):
-        temp = self.df[text_col].apply(lambda x: len(self.st.tokenize(re.sub("\\n"," ",x))))
+    def filter_by_text_length(self,processed_text_col: str,max_len: int):
+        temp = self.df[processed_text_col].apply(len)
         self.df = self.df[temp<=max_len]
 
-    def clean(self,text_col: str,new_col_name: str,post_processing_max_len = None)->None:
+    def clean(self,text_col: str,new_col_name: str)->None:
         self.df[new_col_name] = self.df[text_col].apply(preprocessing)
         self.df[new_col_name] = self.df[new_col_name].apply(lambda text: list(self.st.tokenize(text)))
-        if post_processing_max_len is None:
-            self.post_processing_max_len = self.df[new_col_name].apply(len).max()
-        else:
-            self.post_processing_max_len = post_processing_max_len
-        
+
     def feature_engineer(self,text_col: str)-> None:
         temp = self.df[text_col].apply(lambda x: re.sub("\\n"," ",x))
         self.df['num_characters'] = temp.apply(len)
-        tokenized_col = temp.apply(self.st.tokenize)
+        tokenized_col = temp.apply(lambda text: list(self.st.tokenize(text)))
         self.df['num_words'] = tokenized_col.apply(len)
         self.df['clean'] = (self.df[['toxic',
                                      'severe_toxic',
@@ -96,7 +88,12 @@ class textProcessor(DataProcessor):
             apply(lambda x: count_ner_tags_in_tokenized_sentence(x,'VERB'))\
             *100/self.df['num_words']
         
-    def pre_process(self,text_col: str,max_len: int, target_cols: list,aux_cols  = None, standard_scaler = None):
+    def pre_process(self,text_col: str,max_len: int, target_cols: list,aux_cols  = None, standard_scaler = None, filter_by_max_length = False):
+        
+        if filter_by_max_length:
+            print("FILTERING TEXTS BY MAX LENGTH")
+            self.filter_by_text_length(text_col,max_len)
+
         X = self.df[text_col].values
         X_indices = sentences_to_indices(X,self.word_to_index,max_len)
         y = self.df[target_cols].values
@@ -109,7 +106,7 @@ class textProcessor(DataProcessor):
             #It is assumed that this is training data and we need to fit for the first time.
             if standard_scaler is not None:
                 self.ss = standard_scaler
-                X_aux = self.ss.transform(X_aux)
+                X_aux = self.ss.transform(X_aux)c
             else:
                 self.ss = StandardScaler()
                 self.ss.fit(X_aux)
@@ -122,8 +119,6 @@ class textProcessor(DataProcessor):
     def save(self,suffix,directory = "../../data/processed/"):
         save_to_pickle(self.processed_data,os.path.join(directory,f"processed_data_{suffix}.pickle"))
         save_to_pickle(self.ss,os.path.join(directory,f"StandardScaler_{suffix}.pickle"))
-        save_to_pickle(self.max_len,os.path.join(directory,f"max_len_{suffix}.pickle"))
-        save_to_pickle(self.post_processing_max_len,os.path.join(directory,f"post_processing_max_len_{suffix}.pickle"))
             
         
     
