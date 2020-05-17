@@ -1,0 +1,47 @@
+{'batch_size': 512, 'dropout': 0.1, 'epochs': 50, 'hidden_dense_units': 32, 'learning_rate': 0.007885738888479906, 'n_units': 64}
+{'batch_size': 128, 'dropout': 0.25, 'epochs': 50, 'hidden_dense_units': 32, 'learning_rate': 0.04293641359192496, 'n_units': 1024}
+{'batch_size': 32, 'dropout': 0.35000000000000003, 'epochs': 50, 'hidden_dense_units': 16, 'learning_rate': -2.3458771388798305, 'n_units': 1024}
+{'batch_size': 64, 'dropout': 0.25, 'epochs': 50, 'hidden_dense_units': 32, 'learning_rate': -4.355059355856213, 'n_units': 1024}
+{'batch_size': 128, 'dropout': 0.25, 'epochs': 50, 'hidden_dense_units': 16, 'learning_rate': 0.010854292449315933, 'n_units': 128}
+{'batch_size': 64, 'dropout': 0.45, 'epochs': 50, 'hidden_dense_units': 128, 'learning_rate': 5.956232791446792e-05, 'n_units': 512}
+{'batch_size': 512, 'dropout': 0.1, 'epochs': 1, 'hidden_dense_units': 64, 'learning_rate': 2.2803484032170497e-05, 'n_units': 256}
+{'batch_size': 64, 'dropout': 0.4, 'epochs': 1, 'hidden_dense_units': 16, 'learning_rate': 1.4319373020475207e-05, 'n_units': 64}
+Val loss = 0.2288801372051239
+
+
+=========================================================
+
+
+{'batch_size': 64, 'dropout': 0.05, 'epochs': 1, 'hidden_dense_units': 32, 'learning_rate': 4.133281896204059e-05, 'n_units': 1024}
+Val loss = 0.5681065320968628
+
+
+=========================================================
+
+
+{'batch_size': 32, 'dropout': 0.2, 'epochs': 1, 'hidden_dense_units': 32, 'learning_rate': 0.00031928736186553197, 'n_units': 128}
+Val loss = 0.5827926993370056
+
+
+=========================================================
+
+
+{'batch_size': 128, 'dropout': 0.1, 'epochs': 1, 'hidden_dense_units': 64, 'learning_rate': 0.00030579500261250703, 'n_units': 512}
+{'batch_size': 1024, 'dropout': 0.25, 'epochs': 1, 'hidden_dense_units': 128, 'learning_rate': 0.0028618821305716855, 'n_units': 128}
+{'batch_size': 1024, 'dropout': 0.35000000000000003, 'epochs': 1, 'hidden_dense_units': 64, 'learning_rate': 4.503395189948668e-05, 'n_units': 512}
+{'batch_size': 128, 'dropout': 0.15000000000000002, 'epochs': 1, 'hidden_dense_units': 32, 'learning_rate': 0.0001221799578102239, 'n_units': 128}
+{'batch_size': 128, 'dropout': 0.2, 'epochs': 1, 'hidden_dense_units': 32, 'learning_rate': 0.0017611490366825583, 'n_units': 64}
+{'batch_size': 512, 'dropout': 0.45, 'epochs': 1, 'hidden_dense_units': 64, 'learning_rate': 9.810859649029202e-05, 'n_units': 64}
+{'batch_size': 1024, 'dropout': 0.35000000000000003, 'epochs': 1, 'hidden_dense_units': 16, 'learning_rate': 0.0008340940641961375, 'n_units': 128}
+{'batch_size': 1024, 'dropout': 0.2, 'epochs': 1, 'hidden_dense_units': 32, 'learning_rate': 0.005162511562540555, 'n_units': 256}
+{'batch_size': 128, 'dropout': 0.1, 'epochs': 1, 'hidden_dense_units': 16, 'learning_rate': 0.011217183052877727, 'n_units': 64}
+{'batch_size': 128, 'dropout': 0.05, 'epochs': 1, 'hidden_dense_units': 16, 'learning_rate': 0.0002580918998777426, 'n_units': 1024}
+{'batch_size': 256, 'dropout': 0.35000000000000003, 'epochs': 1, 'hidden_dense_units': 16, 'learning_rate': 0.0027090896942093107, 'n_units': 1024}
+{'batch_size': 128, 'dropout': 0.2, 'epochs': 1, 'hidden_dense_units': 16, 'learning_rate': 1.5544263735004815e-05, 'n_units': 512}
+{'batch_size': 64, 'dropout': 0.3, 'epochs': 1, 'hidden_dense_units': 32, 'learning_rate': 0.0003362417543834383, 'n_units': 128}
+{'batch_size': 32, 'dropout': 0.45, 'epochs': 1, 'hidden_dense_units': 16, 'learning_rate': 0.00525555788899713, 'n_units': 1024}
+{'batch_size': 32, 'dropout': 0.4, 'epochs': 1, 'hidden_dense_units': 32, 'learning_rate': 0.0007385212627062089, 'n_units': 64}
+{'batch_size': 512, 'dropout': 0.1, 'epochs': 1, 'hidden_dense_units': 32, 'learning_rate': 0.0021575008354716312, 'n_units': 1024}
+{'batch_size': 256, 'dropout': 0.35000000000000003, 'epochs': 1, 'hidden_dense_units': 64, 'learning_rate': 5.014330888876604e-05, 'n_units': 64}
+{'batch_size': 1024, 'dropout': 0.25, 'epochs': 1, 'hidden_dense_units': 64, 'learning_rate': 0.06023687188725494, 'n_units': 256}
+{'batch_size': 128, 'dropout': 0.2, 'epochs': 1, 'hidden_dense_units': 128, 'learning_rate': 0.010381369171559681, 'n_units': 64}
