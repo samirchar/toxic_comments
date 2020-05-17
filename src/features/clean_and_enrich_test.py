@@ -22,7 +22,7 @@ if __name__ == "__main__":
     parser.add_argument("--get_splits", type=bool, default=False)
     parser.add_argument("--test_size", type=float, default=0.05)
     parser.add_argument("--nrows", type=int, default=-1)
-    parser.add_argument("--embedding_path",type=str,default = "../../data/raw/pretrained_embeddings/glove.twitter.27B/glove.twitter.27B.200d.txt")
+    parser.add_argument("--embedding_path",type=str,default = "../../../../pretrained_embeddings/glove.twitter.27B/glove.twitter.27B.300d.txt")
     parser.add_argument("--processed_data_path",type=str,default = "../../data/processed")
     parser.add_argument("--raw_data_path",type=str,default = "../../data/raw")
     parser.add_argument("--interim_data_path",type=str,default = "../../data/interim")
@@ -45,7 +45,6 @@ if __name__ == "__main__":
 
     tp = textProcessor(
         data_dir=os.path.join(args.interim_data_path,"train.csv"),
-        # TODO: Change embedding size
         embedding_dir=args.embedding_path,
         nrows=args.nrows,
     )
