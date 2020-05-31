@@ -1,30 +1,60 @@
-# -*- coding: utf-8 -*-
-import click
-import logging
-from pathlib import Path
-from dotenv import find_dotenv, load_dotenv
+import os
+import sys
+from dotenv import load_dotenv, find_dotenv
+
+sys.path.append(os.path.abspath("../.."))
+# find .env automagically by walking up directories until it's found
+dotenv_path = find_dotenv()
+# load up the entries as environment variables
+load_dotenv(dotenv_path)
+# import pandas as pd
+import numpy as np
+from sklearn.model_selection import train_test_split
+import argparse
+import modin.pandas as pd
+from src.code_snippets.utils.data_handler import read_pickle
+
+if __name__ == "__main__":
 
 
-@click.command()
-@click.argument('input_filepath', type=click.Path(exists=True))
-@click.argument('output_filepath', type=click.Path())
-def main(input_filepath, output_filepath):
-    """ Runs data processing scripts to turn raw data from (../raw) into
-        cleaned data ready to be analyzed (saved in ../processed).
-    """
-    logger = logging.getLogger(__name__)
-    logger.info('making final data set from raw data')
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--file_name", type=str)
+    parser.add_argument("--file_source_path", type=str, help="Available sources are: 'raw','interim'")
+    parser.add_argument("--test_size", type=float, default=0.05)
+    parser.add_argument("--nrows", type=int, default=-1)
+    parser.add_argument("--processed_data_path", type=str, default="../../data/processed")
+    parser.add_argument("--raw_data_path", type=str, default="../../data/raw")
+    parser.add_argument("--interim_data_path", type=str, default="../../data/interim")
+    parser.add_argument("--splits",type=str,default="train val test")
+    args = parser.parse_args()
+
+    if args.file_source_path == "raw":
+        file_source = args.raw_data_path
+    elif args.file_source_path == "interim":
+        file_source = args.interim_data_path
+    else:
+        print("This file source is not available")
+
+    if args.nrows == -1:
+        args.nrows = None
+        
+    df = pd.read_csv(os.path.join(args.raw_data_path, "train.csv"))
+
+    if args.splits=='train val':
+        df_train, df_val = train_test_split(
+            df, test_size=args.test_size, random_state=123
+        )
+
+        df_train.to_csv(os.path.join(args.interim_data_path, "train.csv"), index=False)
+        df_val.to_csv(os.path.join(args.interim_data_path, "val.csv"), index=False)
+    
+    elif args.splits == 'train val test':
 
 
-if __name__ == '__main__':
-    log_fmt = '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
-    logging.basicConfig(level=logging.INFO, format=log_fmt)
+        df_train, df_temp = train_test_split(df, test_size=args.test_size*2, random_state=123)
 
-    # not used in this stub but often useful for finding various files
-    project_dir = Path(__file__).resolve().parents[2]
+        df_val, df_test = train_test_split(df_temp, test_size=0.5, random_state=123)
 
-    # find .env automagically by walking up directories until it's found, then
-    # load up the .env entries as environment variables
-    load_dotenv(find_dotenv())
-
-    main()
+        df_train.to_csv(os.path.join(args.interim_data_path, "train.csv"), index=False)
+        df_val.to_csv(os.path.join(args.interim_data_path, "val.csv"), index=False)
+        df_test.to_csv(os.path.join(args.interim_data_path, "test.csv"), index=False)
