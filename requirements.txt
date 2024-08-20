@@ -12,7 +12,7 @@ gensim==3.8.3
 regex==2020.5.14
 fuzzywuzzy==0.18.0
 #tensorflow==2.2.0
-nltk==3.5
+nltk==3.9
 python-dotenv==0.13.0
 #scikit_learn==0.23.1
 workalendar==10.0.0
